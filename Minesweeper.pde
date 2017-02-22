@@ -11,17 +11,16 @@ void setup ()
     textAlign(CENTER,CENTER);
     
     // make the manager
-    Interactive.make( this );
+    Interactive.make(this);
     buttons = new MSButton[NUM_ROWS][NUM_COLS];
     for (int j=0; j<NUM_ROWS; j++) {
         for (int i=0; i<NUM_COLS; i++) {
             buttons[j][i] = new MSButton(j, i);
         }
     }
-    
-    
-    
-    setBombs();
+    for(int i = 0; i < 400; i++) {
+        setBombs();
+    }
 }
 public void setBombs()
 {
@@ -84,7 +83,44 @@ public class MSButton
     public void mousePressed () 
     {
         clicked = true;
-        //your code here
+        if(keyPressed == true) {
+            marked=!marked;
+            if(marked == false) {
+                clicked = false;
+            }
+        }
+        else if(bombs.contains(this)) {
+            displayLosingMessage();
+        }
+        else if(countBombs(r, c)>0) {
+            setLabel(countBombs(r, c));
+        }
+        else {
+            if(isValid(r, c-1) && buttons[r][c-1].isClicked() == false) {
+                buttons[r][c-1].mousePressed();
+            }
+            if(isValid(r, c+1) && buttons[r][c+1].isClicked() == false) {
+                buttons[r][c+1].mousePressed();
+            }
+            if(isValid(r-1, c-1) && buttons[r-1][c-1].isClicked() == false) {
+                buttons[r][c-1].mousePressed();
+            }
+            if(isValid(r-1, c) && buttons[r-1][c].isClicked() == false) {
+                buttons[r-1][c].mousePressed();
+            }
+            if(isValid(r-1, c+1) && buttons[r-1][c+1].isClicked() == false) {
+                buttons[r-1][c+1].mousePressed();
+            }
+            if(isValid(r+1, c-1) && buttons[r+1][c-1].isClicked() == false) {
+                buttons[r+1][c-1].mousePressed();
+            }
+            if(isValid(r+1, c) && buttons[r+1][c].isClicked() == false) {
+                buttons[r+1][c].mousePressed();
+            }
+            if(isValid(r+1, c+1) && buttons[r+1][c+1].isClicked() == false) {
+                buttons[r+1][c+1].mousePressed();
+            }
+        }
     }
 
     public void draw () 
@@ -116,7 +152,22 @@ public class MSButton
     public int countBombs(int row, int col)
     {
         int numBombs = 0;
-        //your code here
+        if(isValid(row, col) && bombs.contains(buttons[row-1][col-1]))
+            numBombs++;
+        if(isValid(row, col) && bombs.contains(buttons[row][col-1]))
+            numBombs++;
+        if(isValid(row, col) && bombs.contains(buttons[row+1][col-1]))
+            numBombs++;
+        if(isValid(row, col) && bombs.contains(buttons[row+1][col]))
+            numBombs++;
+        if(isValid(row, col) && bombs.contains(buttons[row-1][col]))
+            numBombs++;
+        if(isValid(row, col) && bombs.contains(buttons[row-1][col+1]))
+            numBombs++;
+        if(isValid(row, col) && bombs.contains(buttons[row][col+1]))
+            numBombs++;
+        if(isValid(row, col) && bombs.contains(buttons[row+1][col+1]))
+            numBombs++;
         return numBombs;
     }
 }
