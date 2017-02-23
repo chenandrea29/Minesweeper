@@ -18,7 +18,7 @@ void setup ()
             buttons[j][i] = new MSButton(j, i);
         }
     }
-    for(int i = 0; i < 400; i++) {
+    for(int i = 0; i < 50; i++) {
         setBombs();
     }
 }
@@ -33,7 +33,7 @@ public void setBombs()
 
 public void draw ()
 {
-    background( 0 );
+    background(0);
     if(isWon())
         displayWinningMessage();
 }
@@ -44,7 +44,10 @@ public boolean isWon()
 }
 public void displayLosingMessage()
 {
-    //your code here
+    fill(0);
+    rect(0, 0, 400, 400);
+    textAlign(CENTER, CENTER);
+    text("YOU LOST", 200, 200);
 }
 public void displayWinningMessage()
 {
@@ -93,7 +96,7 @@ public class MSButton
             displayLosingMessage();
         }
         else if(countBombs(r, c)>0) {
-            setLabel(countBombs(r, c));
+            setLabel(Integer.toString(countBombs(r, c)));
         }
         else {
             if(isValid(r, c-1) && buttons[r][c-1].isClicked() == false) {
