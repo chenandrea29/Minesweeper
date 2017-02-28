@@ -18,7 +18,7 @@ void setup ()
             buttons[j][i] = new MSButton(j, i);
         }
     }
-    while (bombs.size()<50) {
+    while (bombs.size()<75) {
         setBombs();
     }
 }
@@ -44,10 +44,14 @@ public boolean isWon()
 }
 public void displayLosingMessage()
 {
-    fill(0);
-    rect(0, 0, 400, 400);
-    textAlign(CENTER, CENTER);
-    text("YOU LOST", 200, 200);
+    buttons[10][5].setLabel("G");
+    buttons[10][6].setLabel("A");
+    buttons[10][7].setLabel("M");
+    buttons[10][8].setLabel("E");
+    buttons[10][11].setLabel("O");
+    buttons[10][12].setLabel("V");
+    buttons[10][13].setLabel("E");
+    buttons[10][14].setLabel("R");
 }
 public void displayWinningMessage()
 {
@@ -61,7 +65,7 @@ public class MSButton
     private boolean clicked, marked;
     private String label;
     
-    public MSButton ( int rr, int cc )
+    public MSButton (int rr, int cc)
     {
         width = 400/NUM_COLS;
         height = 400/NUM_ROWS;
@@ -71,7 +75,7 @@ public class MSButton
         y = r*height;
         label = "";
         marked = clicked = false;
-        Interactive.add( this ); // register it with the manager
+        Interactive.add(this); // register it with the manager
     }
     public boolean isMarked()
     {
@@ -130,12 +134,12 @@ public class MSButton
     {    
         if (marked)
             fill(0);
-        else if( clicked && bombs.contains(this) ) 
+        else if(clicked && bombs.contains(this)) 
             fill(255,0,0);
         else if(clicked)
-            fill( 200 );
+            fill(200);
         else 
-            fill( 100 );
+            fill(100);
 
         rect(x, y, width, height);
         fill(0);
@@ -147,7 +151,7 @@ public class MSButton
     }
     public boolean isValid(int r, int c)
     {
-        if (r > 0 && r < NUM_ROWS && c > 0 && c < NUM_COLS) {
+        if (r >= 0 && r < NUM_ROWS && c >= 0 && c < NUM_COLS) {
             return true;
         }
         return false;
@@ -155,21 +159,21 @@ public class MSButton
     public int countBombs(int row, int col)
     {
         int numBombs = 0;
-        if(isValid(row, col) && bombs.contains(buttons[row-1][col-1]))
+        if(isValid(row-1, col-1) && bombs.contains(buttons[row-1][col-1]))
             numBombs++;
-        if(isValid(row, col) && bombs.contains(buttons[row][col-1]))
+        if(isValid(row, col-1) && bombs.contains(buttons[row][col-1]))
             numBombs++;
-        if(isValid(row, col) && bombs.contains(buttons[row+1][col-1]))
+        if(isValid(row+1, col-1) && bombs.contains(buttons[row+1][col-1]))
             numBombs++;
-        if(isValid(row, col) && bombs.contains(buttons[row+1][col]))
+        if(isValid(row+1, col) && bombs.contains(buttons[row+1][col]))
             numBombs++;
-        if(isValid(row, col) && bombs.contains(buttons[row-1][col]))
+        if(isValid(row-1, col) && bombs.contains(buttons[row-1][col]))
             numBombs++;
-        if(isValid(row, col) && bombs.contains(buttons[row-1][col+1]))
+        if(isValid(row-1, col+1) && bombs.contains(buttons[row-1][col+1]))
             numBombs++;
-        if(isValid(row, col) && bombs.contains(buttons[row][col+1]))
+        if(isValid(row, col+1) && bombs.contains(buttons[row][col+1]))
             numBombs++;
-        if(isValid(row, col) && bombs.contains(buttons[row+1][col+1]))
+        if(isValid(row+1, col+1) && bombs.contains(buttons[row+1][col+1]))
             numBombs++;
         return numBombs;
     }
