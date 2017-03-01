@@ -4,6 +4,7 @@ private final static int NUM_ROWS = 20;
 private final static int NUM_COLS = 20;
 private MSButton[][] buttons; //2d array of minesweeper buttons
 private ArrayList <MSButton> bombs = new ArrayList <MSButton>(); //ArrayList of just the minesweeper buttons that are mined
+private boolean gameOver = false;
 
 void setup ()
 {
@@ -39,8 +40,12 @@ public void draw ()
 }
 public boolean isWon()
 {
-    //your code here
-    return false;
+    for (int i = 0; i<bombs.size(); i++) {
+        if (bombs.get(i).isMarked()==false) {
+            return false;
+        }
+    }
+    return true;
 }
 public void displayLosingMessage()
 {
@@ -52,17 +57,40 @@ public void displayLosingMessage()
     buttons[10][12].setLabel("V");
     buttons[10][13].setLabel("E");
     buttons[10][14].setLabel("R");
+    buttons[10][5].end = true;
+    buttons[10][6].end = true;
+    buttons[10][7].end = true;
+    buttons[10][8].end = true;
+    buttons[10][11].end = true;
+    buttons[10][12].end = true;
+    buttons[10][13].end = true;
+    buttons[10][14].end = true;
+    for(int i = 0; i<bombs.size(); i++) {
+        if (bombs.get(i).isMarked()==false)
+            bombs.get(i).clicked=true;
+    }
 }
 public void displayWinningMessage()
 {
-    //your code here
+    buttons[10][6].setLabel("Y");
+    buttons[10][7].setLabel("O");
+    buttons[10][8].setLabel("U");
+    buttons[10][11].setLabel("W");
+    buttons[10][12].setLabel("I");
+    buttons[10][13].setLabel("N");
+    buttons[10][6].end = true;
+    buttons[10][7].end = true;
+    buttons[10][8].end = true;
+    buttons[10][11].end = true;
+    buttons[10][12].end = true;
+    buttons[10][13].end = true;
 }
 
 public class MSButton
 {
     private int r, c;
     private float x,y, width, height;
-    private boolean clicked, marked;
+    private boolean clicked, marked, end;
     private String label;
     
     public MSButton (int rr, int cc)
@@ -74,7 +102,7 @@ public class MSButton
         x = c*width;
         y = r*height;
         label = "";
-        marked = clicked = false;
+        marked = clicked = end = false;
         Interactive.add(this); // register it with the manager
     }
     public boolean isMarked()
@@ -89,6 +117,9 @@ public class MSButton
     
     public void mousePressed () 
     {
+        if (gameOver == true) {
+            return;
+        }
         clicked = true;
         if(keyPressed == true) {
             marked=!marked;
@@ -98,6 +129,7 @@ public class MSButton
         }
         else if(bombs.contains(this)) {
             displayLosingMessage();
+            gameOver = true;
         }
         else if(countBombs(r, c)>0) {
             setLabel(Integer.toString(countBombs(r, c)));
@@ -136,6 +168,8 @@ public class MSButton
             fill(0);
         else if(clicked && bombs.contains(this)) 
             fill(255,0,0);
+        else if (end)
+            fill(100, 200, 255);
         else if(clicked)
             fill(200);
         else 
