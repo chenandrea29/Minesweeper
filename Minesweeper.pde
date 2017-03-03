@@ -1,14 +1,14 @@
 import de.bezier.guido.*;
 //Declare and initialize NUM_ROWS and NUM_COLS = 20
-private final static int NUM_ROWS = 20;
-private final static int NUM_COLS = 20;
+private final static int NUM_ROWS = 30;
+private final static int NUM_COLS = 30;
 private MSButton[][] buttons; //2d array of minesweeper buttons
 private ArrayList <MSButton> bombs = new ArrayList <MSButton>(); //ArrayList of just the minesweeper buttons that are mined
 private boolean gameOver = false;
 
 void setup ()
 {
-    size(400, 400);
+    size(600, 600);
     textAlign(CENTER,CENTER);
     
     // make the manager
@@ -19,7 +19,7 @@ void setup ()
             buttons[j][i] = new MSButton(j, i);
         }
     }
-    while (bombs.size()<75) {
+    while (bombs.size()<150) {
         setBombs();
     }
 }
@@ -49,60 +49,67 @@ public boolean isWon()
 }
 public void displayLosingMessage()
 {
-    buttons[10][5].setLabel("G");
-    buttons[10][6].setLabel("A");
-    buttons[10][7].setLabel("M");
-    buttons[10][8].setLabel("E");
-    buttons[10][11].setLabel("O");
-    buttons[10][12].setLabel("V");
-    buttons[10][13].setLabel("E");
-    buttons[10][14].setLabel("R");
-    buttons[10][5].end = true;
-    buttons[10][6].end = true;
-    buttons[10][7].end = true;
-    buttons[10][8].end = true;
-    buttons[10][11].end = true;
-    buttons[10][12].end = true;
-    buttons[10][13].end = true;
-    buttons[10][14].end = true;
+    buttons[15][10].setLabel("G");
+    buttons[15][11].setLabel("A");
+    buttons[15][12].setLabel("M");
+    buttons[15][13].setLabel("E");
+    buttons[15][16].setLabel("O");
+    buttons[15][17].setLabel("V");
+    buttons[15][18].setLabel("E");
+    buttons[15][19].setLabel("R");
+    buttons[15][10].end = true;
+    buttons[15][11].end = true;
+    buttons[15][12].end = true;
+    buttons[15][13].end = true;
+    buttons[15][16].end = true;
+    buttons[15][17].end = true;
+    buttons[15][18].end = true;
+    buttons[15][19].end = true;
     for(int i = 0; i<bombs.size(); i++) {
         if (bombs.get(i).isMarked()==false)
             bombs.get(i).clicked=true;
     }
+    for (int j = 0; j < NUM_ROWS; j++) {
+        for (int i = 0; i < NUM_ROWS; i++) {
+            if (buttons[j][i].isMarked()==true && !bombs.contains(buttons[j][i])) {
+                buttons[j][i].wrong = true;
+            }
+        }
+    }
 }
 public void displayWinningMessage()
 {
-    buttons[10][6].setLabel("Y");
-    buttons[10][7].setLabel("O");
-    buttons[10][8].setLabel("U");
-    buttons[10][11].setLabel("W");
-    buttons[10][12].setLabel("I");
-    buttons[10][13].setLabel("N");
-    buttons[10][6].end = true;
-    buttons[10][7].end = true;
-    buttons[10][8].end = true;
-    buttons[10][11].end = true;
-    buttons[10][12].end = true;
-    buttons[10][13].end = true;
+    buttons[15][11].setLabel("Y");
+    buttons[15][12].setLabel("O");
+    buttons[15][13].setLabel("U");
+    buttons[15][16].setLabel("W");
+    buttons[15][17].setLabel("I");
+    buttons[15][18].setLabel("N");
+    buttons[15][11].end = true;
+    buttons[15][12].end = true;
+    buttons[15][13].end = true;
+    buttons[15][16].end = true;
+    buttons[15][17].end = true;
+    buttons[15][18].end = true;
 }
 
 public class MSButton
 {
     private int r, c;
     private float x,y, width, height;
-    private boolean clicked, marked, end;
+    private boolean clicked, marked, end, wrong;
     private String label;
     
     public MSButton (int rr, int cc)
     {
-        width = 400/NUM_COLS;
-        height = 400/NUM_ROWS;
+        width = 600/NUM_COLS;
+        height = 600/NUM_ROWS;
         r = rr;
         c = cc; 
         x = c*width;
         y = r*height;
         label = "";
-        marked = clicked = end = false;
+        marked = clicked = end = wrong = false;
         Interactive.add(this); // register it with the manager
     }
     public boolean isMarked()
@@ -142,7 +149,7 @@ public class MSButton
                 buttons[r][c+1].mousePressed();
             }
             if(isValid(r-1, c-1) && buttons[r-1][c-1].isClicked() == false) {
-                buttons[r][c-1].mousePressed();
+                buttons[r-1][c-1].mousePressed();
             }
             if(isValid(r-1, c) && buttons[r-1][c].isClicked() == false) {
                 buttons[r-1][c].mousePressed();
@@ -164,10 +171,12 @@ public class MSButton
 
     public void draw () 
     {    
-        if (marked)
+        if (wrong)
+            fill(0, 255, 0);
+        else if (marked)
             fill(0);
         else if(clicked && bombs.contains(this)) 
-            fill(255,0,0);
+            fill(255, 0, 0);
         else if (end)
             fill(100, 200, 255);
         else if(clicked)
